@@ -1,4 +1,14 @@
 <resources>
     <string name="app_name">Android5.0Test</string>
-
+    <string-array name="drawer_items">
+        <item>主题样式</item>
+        <item>阴影和裁减</item>
+        <item>图片和颜色</item>
+        <item>全新的动画</item>
+        <item>新增widget</item>
+        <item>兼容适配</item>
+    </string-array>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">查看教程</string>
 </resources>
