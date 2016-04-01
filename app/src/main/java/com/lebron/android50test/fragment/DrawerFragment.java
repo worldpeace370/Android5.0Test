@@ -64,7 +64,7 @@ public class DrawerFragment extends Fragment{
                 selectItem(position);
             }
         });
-        ArrayAdapter adapter = new ArrayAdapter<String>(getActivity().getActionBar().getThemedContext(),
+        ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_activated_1);
         Object[] array = getActivity().getResources().getStringArray(R.array.drawer_items);
         adapter.addAll(array);

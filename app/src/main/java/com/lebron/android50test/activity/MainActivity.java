@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.View;
 
 import com.lebron.android50test.R;
+import com.lebron.android50test.fragment.BaseFragment;
 import com.lebron.android50test.fragment.DrawerFragment;
 
 public class MainActivity extends AppCompatActivity implements DrawerLayout.DrawerListener, DrawerFragment.OnDrawerItemSelectedListener{
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
     private DrawerFragment mDrawerFragment;
     private ActionBarDrawerToggle mToggle;
     private Toolbar mToolBar;
-
+    private BaseFragment mCurrentFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (mTheme != -1){
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         setContentView(R.layout.activity_main);
         initDrawer();
         initToolBar();
-        initActionBar();
+        //initActionBar();
     }
 
     /**
@@ -40,27 +41,29 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
     private void initToolBar() {
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolBar);
+        getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolBar,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerLayout.setDrawerListener(mToggle);
+
         mToggle.syncState();
     }
 
     /**
      * 初始化Actionbar
      */
-    private void initActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);//设置显示左侧按钮
-        actionBar.setHomeButtonEnabled(true);//设置左侧按钮可点
-        actionBar.setDisplayShowTitleEnabled(true);//设置显示标题
-
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mToggle.syncState();
-        actionBar.setTitle(getString(R.string.app_name));//设置标题
-    }
+//    private void initActionBar() {
+//        ActionBar actionBar = getActionBar();
+//        actionBar.setDisplayHomeAsUpEnabled(true);//设置显示左侧按钮
+//        actionBar.setHomeButtonEnabled(true);//设置左侧按钮可点
+//        actionBar.setDisplayShowTitleEnabled(true);//设置显示标题
+//
+//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+//        mToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+//                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        mToggle.syncState();
+//        actionBar.setTitle(getString(R.string.app_name));//设置标题
+//    }
 
     /**
      * 初始化DrawerLayout和侧拉菜单布局
@@ -71,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         //设置DrawerListener监听器，重写四个方法
         mDrawerLayout.setDrawerListener(this);
-
         //侧拉菜单部分
         mDrawerFragment = (DrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mDrawerFragment.setOnDrawerItemSelectedListener(this);
@@ -81,30 +83,36 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mDrawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (!mDrawerLayout.isDrawerOpen(GravityCompat.START)){//如果抽屉打开了就不绘制选项菜单了
             getMenuInflater().inflate(R.menu.main, menu);
         }
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public void onDrawerSlide(View drawerView, float slideOffset) {
-
+    public void onDrawerSlide(View drawerView, float slideOffset) {//drawer滑动的时候回调
+        mToggle.onDrawerSlide(drawerView, slideOffset);
     }
 
     @Override
-    public void onDrawerOpened(View drawerView) {
-
+    public void onDrawerOpened(View drawerView) { //打开drawer
+        mToggle.onDrawerOpened(drawerView);  //需要把开关变为打开
+        /**重新绘制选项菜单，会回调onCreateOptionsMenu(Menu)在下一次需要显示的时候
+         * Declare that the options menu has changed, so should be recreated.
+         * The onCreateOptionsMenu(Menu) method will be called the next time it needs to be displayed.
+         */
+        invalidateOptionsMenu();
     }
 
     @Override
-    public void onDrawerClosed(View drawerView) {
-
+    public void onDrawerClosed(View drawerView) { //关闭drawer
+        mToggle.onDrawerClosed(drawerView);  //需要把开关也变为关闭
+        invalidateOptionsMenu();//重新绘制选项菜单
     }
 
     @Override
-    public void onDrawerStateChanged(int newState) {
-
+    public void onDrawerStateChanged(int newState) {    //drawer状态改变的回调
+        mToggle.onDrawerStateChanged(newState);
     }
 
     /**
