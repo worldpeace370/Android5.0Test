@@ -1,7 +1,7 @@
 package com.lebron.android50test.activity;
 
-import android.graphics.Color;
-import android.support.v7.app.ActionBar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         setContentView(R.layout.activity_main);
         initDrawer();
         initToolBar();
+//        mCurrentFragment = FragmentFactory.createFragment(0);
+//        getSupportFragmentManager().beginTransaction().add(R.id.container, mCurrentFragment).commit();
         //initActionBar();
     }
 
@@ -82,10 +84,21 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         //设置DrawerListener监听器，重写四个方法
         mDrawerLayout.setDrawerListener(this);
-        //侧拉菜单部分
+        //侧拉菜单部分，静态的Fragment，findFragmentById()
         mDrawerFragment = (DrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        /**
+         * 为什么需要判null呢？
+         1、主要是因为，当Activity因为配置发生改变（屏幕旋转）或者内存不足被系统杀死，造成重新创建时，我们的fragment会被保存下来，
+         但是会创建新的FragmentManager，新的FragmentManager会首先会去获取保存下来的fragment队列，重建fragment队列，从而恢复之前的状态。
+         2、add(R.id.id_fragment_container,mContentFragment)中的布局的id有何作用？
+         一方面呢，是告知FragmentManager，此fragment的位置；另一方面是此fragment的唯一标识；就像我们上面通过findFragmentById(R.id.navigation_drawer)查找~~
+         */
+        if (mDrawerFragment == null){
+            mDrawerFragment = new DrawerFragment();
+            getSupportFragmentManager().beginTransaction().add(R.id.container, mDrawerFragment).commit();
+        }
         mDrawerFragment.setOnDrawerItemSelectedListener(this);
-        //默认选中mDrawerFragment中的ListView的第一条，即加载第一个Fragment
+        //默认选中mDrawerFragment中的ListView的第一条，即加载第一个Fragment，Style
         mDrawerFragment.selectItem(0);
     }
 
@@ -154,11 +167,28 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
      * 通过DrawerFragment里面的selectItem(position)方法回调，在这里进行切换Fragment
      * @param position
      */
+//    @Override
+//    public void onDrawerItemSelected(int position) {
+//        mDrawerLayout.closeDrawer(GravityCompat.START);
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        Fragment fragment = FragmentFactory.createFragment(position);
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        if (!fragment.isAdded()){
+//            transaction.hide(mCurrentFragment).add(R.id.container, fragment);
+//        }else {
+//            transaction.hide(mCurrentFragment).show(fragment);
+//        }
+//        mCurrentFragment = (BaseFragment) fragment;
+//        transaction.commit();
+//        //transaction.replace(R.id.container, mCurrentFragment).commit();
+//    }
     @Override
     public void onDrawerItemSelected(int position) {
         mDrawerLayout.closeDrawer(GravityCompat.START);
         FragmentManager fragmentManager = getSupportFragmentManager();
         mCurrentFragment = FragmentFactory.createFragment(position);
-        fragmentManager.beginTransaction().replace(R.id.container, mCurrentFragment).commit();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        transaction.replace(R.id.container, mCurrentFragment).commit();
     }
 }
