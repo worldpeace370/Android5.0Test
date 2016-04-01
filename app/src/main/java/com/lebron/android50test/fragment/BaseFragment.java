@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import com.lebron.android50test.R;
 
@@ -21,6 +24,8 @@ public abstract class BaseFragment extends Fragment{
     private View mDemoView;
     //WebView用来显示查看教程
     private WebView mWebView;
+    private boolean isDemoShow = true;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,7 +38,44 @@ public abstract class BaseFragment extends Fragment{
             mWebView.getSettings().setDisplayZoomControls(false);
             mWebView.loadUrl(getUrl());
         }
+        refreshView();
+        Toast.makeText(getActivity(), isDemoShow + "", Toast.LENGTH_SHORT).show();
         return mRootView;
+    }
+
+    /**
+     * 自定义选项菜单选中后方法，在MainActivity的onOptionsItemSelected(MenuItem item)方法中被调用
+     * 传入参数为MainActivity 中的item
+     * 如果在MainActivity中点击了 "查看教程" 选项菜单，会最后调用到这个方法，对Fragment中的内容进行操作
+     * @param item
+     * @return
+     */
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId() == R.id.action_example){//如果点击  查看教程 选项菜单，执行下面操作
+            isDemoShow = !isDemoShow;                //多次点击，每次都会切换
+            refreshView();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 自定义创建选项菜单方法，在MainActivity的onCreateOptionsMenu(Menu menu)方法中被调用
+     * 传入参数即为MainActivity中的menu
+     * 子类Fragment在需要创建选项菜单的时候重写该方法
+     * @param menu
+     * @return
+     */
+    public boolean onCreateOptionsMenu(Menu menu){
+        return true;
+    }
+
+    /**
+     * 刷新UI，如果isDemoShow=true,显示mDemoView,否则显示WebView
+     */
+    private void refreshView() {
+        mDemoView.setVisibility(isDemoShow ? View.VISIBLE:View.INVISIBLE);
+        mWebView.setVisibility(isDemoShow ? View.INVISIBLE:View.VISIBLE);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.lebron.android50test.activity;
 
 import android.app.ActionBar;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -8,11 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.lebron.android50test.R;
 import com.lebron.android50test.fragment.BaseFragment;
 import com.lebron.android50test.fragment.DrawerFragment;
+import com.lebron.android50test.fragment.FragmentFactory;
 
 public class MainActivity extends AppCompatActivity implements DrawerLayout.DrawerListener, DrawerFragment.OnDrawerItemSelectedListener{
 
@@ -81,12 +84,37 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         mDrawerFragment.selectItem(0);
     }
 
+    /**
+     * 不同的Fragment有可能会在ToolBar中创建选项菜单
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mDrawerLayout.isDrawerOpen(GravityCompat.START)){//如果抽屉打开了就不绘制选项菜单了
             getMenuInflater().inflate(R.menu.main, menu);
+            /**
+             * 动态添加选项菜单，并设置可以显示
+             * MenuItem menuItem = menu.add("测试");
+              menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+             */
+            //在此处调用mCurrentFragment.onCreateOptionsMenu(menu)(属于自定义方法);相当于上面的步骤，将菜单添加进来
+            //方法内部也是通过menu.add()方法实现添加菜单
+            //这样实现了根据不同的Fragment显示不同的选项菜单效果
+            mCurrentFragment.onCreateOptionsMenu(menu);
+            return true;
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+    /**
+     * 将MainActivity中ToolBar的点击事件传递到Fragment中去处理
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item)||mCurrentFragment.onOptionsItemSelected(item)||mToggle.onOptionsItemSelected(item);
     }
 
     @Override
@@ -122,6 +150,9 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
      */
     @Override
     public void onDrawerItemSelected(int position) {
-
+        mDrawerLayout.closeDrawer(GravityCompat.START);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        mCurrentFragment = FragmentFactory.createFragment(position);
+        fragmentManager.beginTransaction().replace(R.id.container, mCurrentFragment).commit();
     }
 }
