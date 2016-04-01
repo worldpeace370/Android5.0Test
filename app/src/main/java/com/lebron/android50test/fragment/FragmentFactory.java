@@ -23,9 +23,22 @@ public class FragmentFactory {
                 case FRAGEMENT_STYLE:
                     fragment = new StyleFragment();
                     break;
+                case FRAGEMENT_SHADOW:
+                    fragment = new ShadowFragment();
+                    break;
+                case FRAGEMENT_DRAWABLE:
+                    fragment = new DrawableFragment();
+                    break;
+                case FRAGEMENT_ANIMATION:
+                    fragment = new AnimationFragment();
+                    break;
             }
             mFragmentCache.put(position, fragment);
         }
         return fragment;
+    }
+
+    public static void clear(){
+        mFragmentCache.clear();
     }
 }

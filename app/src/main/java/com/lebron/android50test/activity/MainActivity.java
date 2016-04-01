@@ -1,6 +1,7 @@
 package com.lebron.android50test.activity;
 
 import android.app.ActionBar;
+import android.content.res.Resources;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
     private void initToolBar() {
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolBar);
+//        getResources().getC
         getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolBar,
