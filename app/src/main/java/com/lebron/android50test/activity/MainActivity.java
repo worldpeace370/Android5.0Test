@@ -100,7 +100,8 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
              */
             //在此处调用mCurrentFragment.onCreateOptionsMenu(menu)(属于自定义方法);相当于上面的步骤，将菜单添加进来
             //方法内部也是通过menu.add()方法实现添加菜单
-            //这样实现了根据不同的Fragment显示不同的选项菜单效果
+            //这样实现了根据不同的Fragment显示不同的选项菜单效果,
+            //Fragment添加的菜单项在它自己里面处理
             mCurrentFragment.onCreateOptionsMenu(menu);
             return true;
         }
