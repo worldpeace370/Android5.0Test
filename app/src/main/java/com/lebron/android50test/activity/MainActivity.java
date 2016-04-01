@@ -1,7 +1,7 @@
 package com.lebron.android50test.activity;
 
-import android.app.ActionBar;
-import android.content.res.Resources;
+import android.graphics.Color;
+import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -41,11 +41,14 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
 
     /**
      * 用ToolBar代替ActionBar
+     * 需要在Activity中设置android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+     * style中每个主题设置如下
+     * <item name="android:windowActionBar">false</item>
+     * <item name="android:windowNoTitle">true</item>
      */
     private void initToolBar() {
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolBar);
-//        getResources().getC
         getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolBar,
@@ -58,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
      * 初始化Actionbar
      */
 //    private void initActionBar() {
-//        ActionBar actionBar = getActionBar();
+//        ActionBar actionBar = getSupportActionBar();
 //        actionBar.setDisplayHomeAsUpEnabled(true);//设置显示左侧按钮
 //        actionBar.setHomeButtonEnabled(true);//设置左侧按钮可点
 //        actionBar.setDisplayShowTitleEnabled(true);//设置显示标题

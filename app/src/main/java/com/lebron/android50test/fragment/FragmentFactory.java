@@ -32,6 +32,9 @@ public class FragmentFactory {
                 case FRAGEMENT_ANIMATION:
                     fragment = new AnimationFragment();
                     break;
+                case FRAGEMENT_WIDGET:
+                    fragment = new WidgetFragment();
+                    break;
             }
             mFragmentCache.put(position, fragment);
         }
