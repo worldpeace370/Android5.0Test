@@ -2,6 +2,7 @@ package com.lebron.android50test.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -208,5 +209,28 @@ public class StyleFragment extends BaseFragment implements MenuItem.OnMenuItemCl
             }
         }
         return false;
+    }
+
+    /**
+     * 可以通过参数savedInstanceState来得到onSaveInstanceState(Bundle outState)方法保存的数据
+     * @param savedInstanceState
+     */
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    /**
+     * 将需要保存的数据保存在下面的outState中
+     * @param outState
+     */
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
     }
 }
