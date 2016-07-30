@@ -1,6 +1,5 @@
 package com.lebron.android50test.activity;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
@@ -36,8 +35,7 @@ public class MainActivity extends AppCompatActivity implements DrawerLayout.Draw
         setContentView(R.layout.activity_main);
         initDrawer();
         initToolBar();
-//        mCurrentFragment = FragmentFactory.createFragment(0);
-//        getSupportFragmentManager().beginTransaction().add(R.id.container, mCurrentFragment).commit();
+
         //initActionBar();
     }
 

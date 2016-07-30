@@ -1,8 +1,9 @@
 package com.lebron.android50test.fragment;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,12 +44,21 @@ public class StyleFragment extends BaseFragment implements MenuItem.OnMenuItemCl
 
     private View mRootView;
     private String[] menuTitles;
+    private String TAG = "StyleFragment";
+
     public StyleFragment() {
 
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.i(TAG, "onAttach: 执行了");
+    }
+
+    @Override
     public View initView() {
+        Log.i(TAG, "onCreateView: 执行了");
         mRootView = View.inflate(getActivity(), R.layout.fragment_style, null);
         //点击Spinner的不同选项切换主题
         Spinner spinner = (Spinner) mRootView.findViewById(R.id.spinner);
@@ -218,6 +228,7 @@ public class StyleFragment extends BaseFragment implements MenuItem.OnMenuItemCl
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.i(TAG, "onActivityCreated: 执行了");
     }
 
     /**
